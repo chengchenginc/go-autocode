@@ -18,24 +18,30 @@ type Field struct {
 	Nullable     bool
 }
 
-type Template struct{
-		Domain string
-		DomainFields string
+type Template struct {
+	Domain       string
+	DomainFields string
 }
 
-func ParseTemplate(sql string)(template Template){
-		table := ParseSql(sql)
-		template.Domain = table.Name
-		for _,f :=range table.Fields{
-				template.DomainFields += "\n    "+ f.Name+" "+f.DataType+" "+ "`orm:\"column("+f.Name+")\"` "
-		}
-		return
+func ParseTemplate(sql string) (template Template) {
+	table := ParseSql(sql)
+	template.Domain = ucfirst(table.Name)
+	for _, f := range table.Fields {
+		template.DomainFields += "\n    " + ucfirst(f.Name) + " " + f.DataType + " " + "`orm:\"column(" + f.Name + ")\"` "
+	}
+	return
 }
 
 func ParseSql(sql string) (table Table) {
 	table.Name = parseTableName(sql)
 	table.Fields = parseFields(sql)
 	return
+}
+
+func ucfirst(str string) string {
+	first := str[0:1]
+	str = strings.Replace(str, first, strings.ToUpper(first), 1)
+	return str
 }
 
 func parseTableName(sql string) (name string) {

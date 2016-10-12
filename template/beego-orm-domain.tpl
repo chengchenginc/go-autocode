@@ -9,7 +9,7 @@ type @{domain} struct{@{domain_fields}
 }
 
 func (d *@{domain}) tableName() string {
-      return @{domain}
+      return "@{domain}"
 }
 
 func init(){
